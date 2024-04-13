@@ -9,11 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "bulma": "^1.0.0",
+    "debounce": "^2.0.0",
     "sql.js": "^1.10.2",
     "vue": "^3.4.21",
     "zstddec": "^0.1.0"
   },
   "devDependencies": {
+    "@types/debounce": "^1.2.4",
     "@types/sql.js": "^1.4.9",
     "@vitejs/plugin-vue": "^5.0.4",
     "typescript": "^5.2.2",

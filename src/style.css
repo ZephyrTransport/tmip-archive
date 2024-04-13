@@ -1,3 +1,5 @@
+@import '../node_modules/bulma/css/bulma.min.css';
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -25,7 +27,7 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
 }
@@ -60,9 +62,41 @@ button:focus-visible {
 
 #app {
   max-width: 1280px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   padding: 2rem;
   text-align: center;
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+.top-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.results-table {
+  display: flex;
+  flex-direction: column;
+  font-weight: 300;
+  font-size: 0.9rem;
+}
+
+.results-row {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 5rem 2fr 2fr;
+  gap: 1rem;
+  place-items: start;
+  text-align: left;
+  margin-bottom: 0.25rem;
+}
+
+.row-subject {
+  font-weight: 700;
 }
 
 @media (prefers-color-scheme: light) {
