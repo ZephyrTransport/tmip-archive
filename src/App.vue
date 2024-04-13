@@ -3,26 +3,45 @@
 // Questions / PRs, contact Billy Charlton <mail@billyc.cc>
 // ----------------------------------------------------------------
 
-// ZSTD archive decompressor (database is compressed)
-import { ZSTDDecoder } from 'zstddec';
-import { defineComponent } from 'vue';
-
 const DB_PATH = '/tmip.db.zst';
+
+import { defineComponent } from 'vue';
+import { ZSTDDecoder } from 'zstddec';
+import initSQL from 'sql.js';
+
+import sqlWasm from 'sql.js/dist/sql-wasm.wasm?url';
+
+console.log({ initSQL });
 
 export default defineComponent({
   data() {
     return {
       count: 0,
-      db: {},
+      db: null as null | Buffer,
     };
   },
 
-  mounted() {
+  async mounted() {
     // this happens async
-    this.db = this.fetchSqliteDatabase();
+    const buffer = await this.fetchSqliteDatabase();
+    this.initializeDatabaseFromBuffer(buffer);
   },
 
   methods: {
+    async initializeDatabaseFromBuffer(buffer: any) {
+      const SQL = await initSQL({
+        // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
+        // You can omit locateFile completely when running in node
+        locateFile: () => sqlWasm,
+      });
+
+      const LOADED_DB = new SQL.Database(buffer);
+      console.log({ LOADED_DB });
+
+      const response = LOADED_DB.exec('SELECT * FROM webinars;');
+      console.log({ response });
+    },
+
     async fetchSqliteDatabase() {
       // initialize ZSTD decompressor
       const decoder = new ZSTDDecoder();
