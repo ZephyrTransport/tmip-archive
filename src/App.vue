@@ -166,5 +166,5 @@ export default defineComponent({
     <button class="button is-link">Search</button>
   </div>
 
-  <component :is="routerView" :results="results" :messages="currentMessages" />
+  <component :is="routerView" :results="results" :messages="currentMessages" :db="db" />
 </template>

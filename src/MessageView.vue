@@ -7,6 +7,9 @@ import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import { Database } from 'sql.js';
 
+const ATTACH_RAW_URL =
+  'https://github.com/ZephyrTransport/tmip-archive/raw/main/public/attachments';
+
 export default defineComponent({
   props: {
     db: { type: Object as PropType<Database> },
@@ -15,22 +18,49 @@ export default defineComponent({
 
   data() {
     return {
-      results: [] as any[],
-      searchTerm: '',
+      // results: [] as any[],
+      // searchTerm: '',
     };
   },
 
   computed: {},
 
-  async mounted() {},
+  async mounted() {
+    this.findAttachments();
+  },
 
-  watch: {},
+  watch: {
+    messages() {
+      this.findAttachments();
+    },
+  },
 
   methods: {
+    async findAttachments() {
+      console.log('A');
+      if (!this.messages?.length) return;
+      console.log('B');
+
+      for (const row of this.messages) {
+        console.log('C', row);
+        const post_id = row.message_id || row.id;
+        const attachments = this.query('message_attachments', { post_id });
+        const withURLs = attachments.map((a: any) => {
+          const att = {
+            url: `${ATTACH_RAW_URL}/${a.attachment_filename}`,
+            filename: a.attachment_filename,
+          };
+          return att;
+        });
+        console.log({ withURLs });
+        row.attachments = withURLs;
+      }
+    },
+
     query(table: string, options?: any) {
       if (!this.db) return [];
 
-      let query = `SELECT * FROM ${table} WHERE id = '${options.message}'`;
+      let query = `SELECT * FROM ${table} WHERE post_id = '${options.post_id}'`;
       console.log(query);
 
       const response = this.db.exec(query);
@@ -38,22 +68,10 @@ export default defineComponent({
       const answer = response[0].values.map((row: any[]) => {
         const obj = {} as any;
         columns.forEach((col, i) => (obj[col] = row[i]));
-        // scrub email addresses
-        if (obj.from_field) {
-          let email = obj.from_field as string;
-          let lt = email.indexOf('<');
-          if (lt > -1) email = email.substring(0, lt);
-          email = email.replaceAll('"', '').trim();
-          obj.from_field = email;
-        }
         return obj;
       });
 
-      const clipped = answer.slice(0, 100);
-      console.log(clipped);
-
-      if (options?.message) return clipped;
-      this.results = clipped;
+      return answer;
     },
   },
 });
@@ -78,6 +96,12 @@ export default defineComponent({
       <hr />
       <p v-html="row.body"></p>
       <!-- <p v-html="row.body.replaceAll('    ', '<br/><br/>')"></p> -->
+      <div class="attachment-panel" v-if="row.attachments">
+        <h3>Attachments:</h3>
+        <div v-for="attachment in row.attachments">
+          <a :href="attachment.url">{{ attachment.filename }}</a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
