@@ -1,0 +1,38 @@
+NAME,TABLE,TYPE,DOMAIN,VALUE,LABEL
+WHYTRP90_AGG,trip,character,WHYTRP90 %in% '01',1,Work
+WHYTRP90_AGG,trip,character,"WHYTRP90 %in% c('03','04','06')",2,Shop and Errands
+WHYTRP90_AGG,trip,character,"WHYTRP90 %in% c('07','08','10')",3,Social/Rec
+WHYTRP90_AGG,trip,character,"WHYTRP90 %in% c('02','05','11')",4,Other
+WHYTRP90_AGG,trip,character,WHYTO %in% c('08'),5,School
+TIME_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('06','07','08')",1,Morning
+TIME_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('09','10','11','12','13','14','15')",2,Mid-day
+TIME_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('16','17','18')",3,Evening
+TIME_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('19','20','21','22','23','01','02','03','04','05')",4,Night
+TRAVDAY_AGG,household,character,"TRAVDAY %in% c('01','07')",1,Weekend
+TRAVDAY_AGG,household,character,"!TRAVDAY %in% c('01','07')",2,Weekday
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('00')",1,0:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('01')",2,1:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('02')",3,2:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('03')",4,3:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('04')",5,4:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('05')",6,5:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('06')",7,6:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('07')",8,7:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('08')",9,8:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('10')",10,9:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('10')",11,10:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('11')",12,11:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('12')",13,12:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('13')",14,13:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('14')",15,14:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('15')",16,15:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('16')",17,16:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('17')",18,17:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('18')",19,18:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('19')",20,19:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('20')",21,20:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('21')",22,21:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('22')",23,22:00
+HOUR_OF_DAY,trip,character,"substr(STRTTIME, 0, 2) %in% c('23')",24,23:00
+SUMMER,household,character,"substr(TDAYDATE, 5, 6) %in% c('06','07','08')",1,Summer
+SUMMER,household,character,"!substr(TDAYDATE, 5, 6) %in% c('06','07','08')",2,Not summer

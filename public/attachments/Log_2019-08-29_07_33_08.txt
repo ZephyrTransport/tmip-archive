@@ -1,0 +1,192 @@
+FBTest
+Test on Fort Bend County
+2019-08-29_07:33:08
+
+2019-08-29 07:33:08 : 2019-08-29 07:33:08 -- Initializing Model. 
+
+2019-08-29 07:33:08 : Geographical indices successfully read. 
+
+2019-08-29 07:33:08 : Geography sucessfully added to datastore. 
+
+2019-08-29 07:33:08 : Loading model parameters file. 
+
+2019-08-29 07:33:08 : Parsing model script 
+
+2019-08-29 07:33:08 : Success parsing model script 
+
+2019-08-29 07:33:09 : Simulating model run. 
+
+2019-08-29 07:33:09 : Model run simulation had one or more warnings. Datasets will be be overwritten when the model runs. Check that this is what it intended.  
+
+2019-08-29 07:33:09 : Module 'LocateEmployment' will overwrite dataset 'TotEmp' in table 'Bzone'. 
+
+2019-08-29 07:33:09 : Module 'LocateEmployment' will overwrite dataset 'RetEmp' in table 'Bzone'. 
+
+2019-08-29 07:33:09 : Module 'LocateEmployment' will overwrite dataset 'SvcEmp' in table 'Bzone'. 
+
+2019-08-29 07:33:09 : Module 'AssignLocTypes' will overwrite dataset 'Marea' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'Age' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'VehicleAccess' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'OwnCost' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'OwnCostPerMile' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'InsCost' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'Vehicles' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'NumLtTrk' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'NumAuto' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'CalculateCarbonIntensity' will overwrite dataset 'ElectricityCI' in table 'Azone'. 
+
+2019-08-29 07:33:09 : Module 'CalculateCarbonIntensity' will overwrite dataset 'HvyTrkFuelCI' in table 'Region'. 
+
+2019-08-29 07:33:09 : Module 'CalculateCarbonIntensity' will overwrite dataset 'TransitVanFuelCI' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateCarbonIntensity' will overwrite dataset 'TransitBusFuelCI' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateCarbonIntensity' will overwrite dataset 'TransitRailFuelCI' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'HvyTrkDvmt' in table 'Region'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'UrbanLdvDvmt' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'UrbanHvyTrkDvmt' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'MPG' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'GPM' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'MPKWH' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'KWHPM' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'MPGe' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'ElecDvmtProp' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'FuelCO2ePM' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'ElecCO2ePM' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'Dvmt' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'UrbanHhDvmt' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'RuralHhDvmt' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'TownHhDvmt' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'WalkTrips' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'BikeTrips' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'TransitTrips' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'VehicleTrips' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'LocateEmployment' will overwrite dataset 'TotEmp' in table 'Bzone'. 
+
+2019-08-29 07:33:09 : Module 'LocateEmployment' will overwrite dataset 'RetEmp' in table 'Bzone'. 
+
+2019-08-29 07:33:09 : Module 'LocateEmployment' will overwrite dataset 'SvcEmp' in table 'Bzone'. 
+
+2019-08-29 07:33:09 : Module 'AssignLocTypes' will overwrite dataset 'Marea' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'Age' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'VehicleAccess' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'OwnCost' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'OwnCostPerMile' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'InsCost' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'Vehicles' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'NumLtTrk' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'AdjustVehicleOwnership' will overwrite dataset 'NumAuto' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'CalculateCarbonIntensity' will overwrite dataset 'ElectricityCI' in table 'Azone'. 
+
+2019-08-29 07:33:09 : Module 'CalculateCarbonIntensity' will overwrite dataset 'HvyTrkFuelCI' in table 'Region'. 
+
+2019-08-29 07:33:09 : Module 'CalculateCarbonIntensity' will overwrite dataset 'TransitVanFuelCI' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateCarbonIntensity' will overwrite dataset 'TransitBusFuelCI' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateCarbonIntensity' will overwrite dataset 'TransitRailFuelCI' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'HvyTrkDvmt' in table 'Region'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'UrbanLdvDvmt' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'UrbanHvyTrkDvmt' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'HvyTrkDvmtIncomeFactor' in table 'Region'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'HvyTrkDvmtPopulationFactor' in table 'Region'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'ComSvcDvmtHhDvmtFactor' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'ComSvcDvmtIncomeFactor' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'HvyTrkDvmtIncomeFactor' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'ComSvcDvmtPopulationFactor' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'HvyTrkDvmtPopulationFactor' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadDvmt' will overwrite dataset 'LdvUrbanRoadProp' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'CalculateRoadPerformance' will overwrite dataset 'LambdaAdj' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'MPG' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'GPM' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'MPKWH' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'KWHPM' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'MPGe' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'ElecDvmtProp' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'FuelCO2ePM' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'AdjustHhVehicleMpgMpkwh' will overwrite dataset 'ElecCO2ePM' in table 'Vehicle'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'Dvmt' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'UrbanHhDvmt' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'RuralHhDvmt' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'TownHhDvmt' in table 'Marea'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'WalkTrips' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'BikeTrips' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'TransitTrips' in table 'Household'. 
+
+2019-08-29 07:33:09 : Module 'BudgetHouseholdDvmt' will overwrite dataset 'VehicleTrips' in table 'Household'. 
+
+2019-08-29 07:33:09 : Model run simulation completed without identifying any errors. 
+
+2019-08-29 07:33:09 : Input file error for module 'AssignParkingRestrictions' for input file 'bzone_parking.csv'. Has one or more errors in the data inputs as follows: 
+
+2019-08-29 07:33:09 : Data in data name 'PropCashOut' includes values matching PROHIBIT condition (NA). 
+
+2019-08-29 07:33:09 : Data in data name 'PkgCost' includes values matching PROHIBIT condition (NA). 
+
+2019-08-29 07:33:10 : The value of carbon intensity for Electricity is not supplied in 'model_fuel_co2.csv' so using the default values for carbon intensity 
+
