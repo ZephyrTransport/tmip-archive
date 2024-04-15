@@ -64,7 +64,6 @@ button:focus-visible {
   max-width: 1280px;
   /* margin: 0 auto; */
   padding: 2rem;
-  text-align: center;
   width: 100%;
 }
 
@@ -79,6 +78,13 @@ button:focus-visible {
 }
 
 .results-table {
+  display: flex;
+  flex-direction: column;
+  font-weight: 300;
+  font-size: 0.9rem;
+}
+
+.message-panel {
   display: flex;
   flex-direction: column;
   font-weight: 300;

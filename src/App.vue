@@ -11,18 +11,62 @@ import initSQL, { Database } from 'sql.js';
 import sqlWasm from 'sql.js/dist/sql-wasm.wasm?url';
 import debounce from 'debounce';
 
+import SearchResultsView from './SearchResultsView.vue';
+import MessageView from './MessageView.vue';
+
 export default defineComponent({
+  components: { SearchResultsView, MessageView },
+
   data() {
     return {
       results: [] as any[],
       db: null as null | Database,
       searchTerm: '',
       debounceQuery: {} as any,
+      currentPath: '',
     };
+  },
+
+  computed: {
+    routerView() {
+      const path = this.currentPath.slice(1) || '/';
+
+      if (path.startsWith('/message')) return MessageView;
+      return SearchResultsView;
+    },
+
+    currentMessages() {
+      const path = this.currentPath.slice(1) || '/';
+      console.log({ path });
+      if (!path.startsWith('/message')) return null;
+      let message = path.slice(9);
+      console.log({ message });
+      if (message.includes('?')) message = message.slice(0, message.indexOf('?'));
+
+      const details = this.query('messages', { message });
+      return details;
+    },
+  },
+
+  watch: {
+    searchTerm() {
+      this.results = [];
+      this.debounceQuery('messages', { search: this.searchTerm });
+    },
   },
 
   async mounted() {
     this.debounceQuery = debounce(this.query, 333);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    console.log(urlParams);
+
+    this.currentPath = window.location.hash;
+    window.addEventListener('hashchange', () => {
+      console.log('PING!');
+      this.currentPath = window.location.hash;
+      console.log(window.location.hash);
+    });
 
     const buffer = await this.fetchSqliteDatabase();
     this.db = await this.initializeDatabaseFromBuffer(buffer);
@@ -39,12 +83,6 @@ export default defineComponent({
     // this.results = messages.slice(0, 100);
   },
 
-  watch: {
-    searchTerm() {
-      this.debounceQuery('messages', { search: this.searchTerm });
-    },
-  },
-
   methods: {
     query(table: string, options?: any) {
       if (!this.db) return [];
@@ -53,6 +91,10 @@ export default defineComponent({
 
       if (options?.search && options.search !== '') {
         query = `SELECT * FROM ${table} WHERE from_field LIKE '%${options.search}%'`;
+      }
+
+      if (options?.message && options.message !== '') {
+        query = `SELECT * FROM ${table} WHERE id = '${options.message}'`;
       }
 
       query += ';';
@@ -74,7 +116,11 @@ export default defineComponent({
         return obj;
       });
 
-      this.results = answer.slice(0, 100);
+      const clipped = answer.slice(0, 100);
+      console.log(clipped);
+
+      if (options?.message) return clipped;
+      this.results = clipped;
     },
 
     async initializeDatabaseFromBuffer(buffer: Uint8Array) {
@@ -115,13 +161,6 @@ export default defineComponent({
     />
     <button class="button is-link">Search</button>
   </div>
-  <div class="results-table">
-    <div v-for="row in results" class="results-row">
-      <div class="row-date">{{ row.date.split(' ')[0] }}</div>
-      <div>
-        <div class="row-subject">{{ row.subject }}</div>
-        <div class="row-from">{{ row.from_field }}</div>
-      </div>
-    </div>
-  </div>
+
+  <component :is="routerView" :results="results" :messages="currentMessages" />
 </template>
