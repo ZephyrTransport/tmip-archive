@@ -15,10 +15,12 @@ export default defineComponent({
 <template>
   <div class="results-table">
     <div v-for="row in results" class="results-row">
-      <div class="row-date">{{ row.date.split(' ')[0] }}</div>
+      <div class="row-date">
+        {{ (row.date || row.date_timestamp).split(' ')[0] }}
+      </div>
       <div>
         <div class="row-subject">
-          <a :href="`#/message/${row.id}`"> {{ row.subject }} </a>
+          <a :href="`#/message/${row.rowid}`"> {{ row.subject }} </a>
         </div>
         <div class="row-from">{{ row.from_field }}</div>
       </div>

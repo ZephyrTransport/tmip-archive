@@ -9,7 +9,7 @@ import { Database } from 'sql.js';
 
 export default defineComponent({
   props: {
-    db: { type: Object as PropType<Database>, required: true },
+    db: { type: Object as PropType<Database> },
     messages: Array<any>,
   },
 
@@ -62,6 +62,20 @@ export default defineComponent({
 <template>
   <div class="message-panel">
     <div v-for="row in messages">
+      <div class="flex">
+        <div style="width: 4rem">Subject:</div>
+        <b>{{ row.subject }}</b>
+      </div>
+      <div class="flex">
+        <div style="width: 4rem">From:</div>
+        <b>{{ row.from_field }}</b>
+      </div>
+      <div class="flex">
+        <div style="width: 4rem">Sent:</div>
+        <b>{{ row.date_timestamp }}</b>
+      </div>
+
+      <hr />
       <p v-html="row.body"></p>
       <!-- <p v-html="row.body.replaceAll('    ', '<br/><br/>')"></p> -->
     </div>

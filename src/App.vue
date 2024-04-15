@@ -87,14 +87,18 @@ export default defineComponent({
     query(table: string, options?: any) {
       if (!this.db) return [];
 
-      let query = `SELECT * FROM ${table}`;
+      let query = `SELECT rowid,* FROM ${table} ORDER BY date_timestamp DESC`;
 
       if (options?.search && options.search !== '') {
-        query = `SELECT * FROM ${table} WHERE from_field LIKE '%${options.search}%'`;
+        query =
+          `SELECT rowid,* FROM ${table} WHERE` +
+          ` from_field LIKE '%${options.search}%'` +
+          ` OR subject LIKE '%${options.search}%'` +
+          ` ORDER BY date_timestamp DESC`;
       }
 
       if (options?.message && options.message !== '') {
-        query = `SELECT * FROM ${table} WHERE id = '${options.message}'`;
+        query = `SELECT rowid,* FROM ${table} WHERE rowid = '${options.message}'`;
       }
 
       query += ';';
