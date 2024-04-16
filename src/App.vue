@@ -3,7 +3,7 @@
 // Questions / PRs, contact Billy Charlton <mail@billyc.cc>
 // ----------------------------------------------------------------
 
-const DB_PATH = '/tmip.db.zst';
+const DB_PATH = '/tmip-archive-assets/tmip.db.zst';
 
 import { defineComponent } from 'vue';
 import { ZSTDDecoder } from 'zstddec';
@@ -231,3 +231,7 @@ export default defineComponent({
 
   <component :is="routerView" :results="results" :messages="currentMessages" :db="db" />
 </template>
+
+<style scoped>
+@import './style.css';
+</style>
