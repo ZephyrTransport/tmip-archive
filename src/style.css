@@ -86,7 +86,7 @@ button:focus-visible {
 
 .message-panel {
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   font-weight: 300;
   font-size: 0.9rem;
 }
@@ -115,6 +115,19 @@ h3 {
   border-radius: 5px;
   width: max-content;
   padding: 0.5rem 0.75rem;
+}
+
+.thread {
+  flex: 1;
+  min-width: 14rem;
+  border-right: 1px solid #eee;
+  margin-right: 1rem;
+}
+
+.thread-message {
+  font-size: 0.8rem;
+  line-height: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 @media (prefers-color-scheme: light) {

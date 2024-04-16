@@ -23,14 +23,17 @@ export default defineComponent({
       db: null as null | Database,
       searchTerm: '',
       debounceQuery: {} as any,
+      debounceQuerySearchTerm: {} as any,
       currentPath: '',
     };
   },
 
   computed: {
     routerView() {
+      console.log('11');
       const path = this.currentPath.slice(1) || '/';
 
+      console.log('12', path);
       if (path.startsWith('/message')) return MessageView;
       return SearchResultsView;
     },
@@ -51,12 +54,13 @@ export default defineComponent({
   watch: {
     searchTerm() {
       this.results = [];
-      this.debounceQuery('messages', { search: this.searchTerm });
+      this.debounceQuerySearchTerm('messages', { search: this.searchTerm });
     },
   },
 
   async mounted() {
     this.debounceQuery = debounce(this.query, 333);
+    this.debounceQuerySearchTerm = debounce(this.getMessagesForSearchTerm, 333);
 
     const urlParams = new URLSearchParams(window.location.search);
     console.log(urlParams);
@@ -68,33 +72,84 @@ export default defineComponent({
       console.log(window.location.hash);
     });
 
+    console.log('LOADING DATABASE--');
     const buffer = await this.fetchSqliteDatabase();
     this.db = await this.initializeDatabaseFromBuffer(buffer);
+    console.log('--DONE LOADING DATABASE');
 
     //tables
     const query = this.db.exec("SELECT name FROM sqlite_master where type='table';");
     const tables = query[0].values.flat();
     console.log({ tables });
 
-    // test
-    this.query('messages');
+    // initial view
+
+    // this.query('messages');
     // const messages = this.query('messages');
     // console.log({ messages });
     // this.results = messages.slice(0, 100);
   },
 
   methods: {
-    query(table: string, options?: any) {
+    convertQueryArrayToObject(response: any[]) {
+      let json = [] as any;
+
+      if (response.length) {
+        const columns = response[0].columns as string[];
+        json = response[0].values.map((row: any[]) => {
+          const obj = {} as any;
+          columns.forEach((col, i) => (obj[col] = row[i]));
+          // scrub email addresses
+          if (obj.from_field) {
+            let email = obj.from_field as string;
+            let lt = email.indexOf('<');
+            if (lt > -1) email = email.substring(0, lt);
+            email = email.replaceAll('"', '').trim();
+            obj.from_field = email;
+          }
+          return obj;
+        });
+      }
+      return json;
+    },
+
+    getMessagesForSearchTerm(table: string, options?: any) {
+      console.log('GET THREADS', table, options);
       if (!this.db) return [];
 
-      let query = `SELECT rowid,* FROM ${table} ORDER BY date_timestamp DESC`;
+      let query =
+        `SELECT rowid,* FROM ${table} WHERE` +
+        ` from_field LIKE '%${options.search}%'` +
+        ` OR subject LIKE '%${options.search}%'` +
+        ` ORDER BY date_timestamp ASC;`;
+
+      console.log(query);
+      const response = this.db.exec(query);
+
+      const json = this.convertQueryArrayToObject(response);
+      const clipped = json.slice(0, 100);
+      console.log(clipped);
+
+      console.log(333, options);
+      if (options?.message) return clipped;
+
+      // back to search results view. this is probably in the wrong place
+      window.location.hash = '/';
+      this.results = clipped;
+    },
+
+    query(table: string, options?: any) {
+      console.log(1000, table, options);
+      if (!this.db) return [];
+
+      let query = `SELECT rowid,* FROM ${table} ORDER BY date_timestamp ASC`;
 
       if (options?.search && options.search !== '') {
         query =
           `SELECT rowid,* FROM ${table} WHERE` +
           ` from_field LIKE '%${options.search}%'` +
           ` OR subject LIKE '%${options.search}%'` +
-          ` ORDER BY date_timestamp DESC`;
+          ` ORDER BY date_timestamp ASC`;
       }
 
       if (options?.message && options.message !== '') {
@@ -105,25 +160,33 @@ export default defineComponent({
 
       console.log(query);
       const response = this.db.exec(query);
-      const columns = response[0].columns as string[];
-      const answer = response[0].values.map((row: any[]) => {
-        const obj = {} as any;
-        columns.forEach((col, i) => (obj[col] = row[i]));
-        // scrub email addresses
-        if (obj.from_field) {
-          let email = obj.from_field as string;
-          let lt = email.indexOf('<');
-          if (lt > -1) email = email.substring(0, lt);
-          email = email.replaceAll('"', '').trim();
-          obj.from_field = email;
-        }
-        return obj;
-      });
 
+      let answer = [] as any;
+      if (response.length) {
+        const columns = response[0].columns as string[];
+        answer = response[0].values.map((row: any[]) => {
+          const obj = {} as any;
+          columns.forEach((col, i) => (obj[col] = row[i]));
+          // scrub email addresses
+          if (obj.from_field) {
+            let email = obj.from_field as string;
+            let lt = email.indexOf('<');
+            if (lt > -1) email = email.substring(0, lt);
+            email = email.replaceAll('"', '').trim();
+            obj.from_field = email;
+          }
+          return obj;
+        });
+      }
       const clipped = answer.slice(0, 100);
       console.log(clipped);
 
+      console.log(333, options);
       if (options?.message) return clipped;
+
+      // back to search results view. this is probably in the wrong place
+      // this.currentPath = '/'; // window.location.hash;
+      window.location.hash = '/';
       this.results = clipped;
     },
 
