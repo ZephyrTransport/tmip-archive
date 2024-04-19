@@ -119,27 +119,30 @@ export default defineComponent({
 
 <template>
   <div class="message-panel">
-    <div v-for="row in messages">
-      <div class="flex">
-        <div style="width: 4rem; margin-right: 0.25rem">Subject:</div>
-        <b>{{ row.subject }}</b>
-      </div>
-      <div class="flex">
-        <div style="width: 4rem; margin-right: 0.25rem">From:</div>
-        <b>{{ row.from_field }}</b>
-      </div>
-      <div class="flex">
-        <div style="width: 4rem; margin-right: 0.25rem">Sent:</div>
-        <b>{{ row.date_timestamp }}</b>
-      </div>
+    <div class="message-pane">
+      <div v-for="row in messages">
+        <div class="flex">
+          <div style="width: 4rem; margin-right: 0.25rem">Subject:</div>
+          <b>{{ row.subject }}</b>
+        </div>
+        <div class="flex">
+          <div style="width: 4rem; margin-right: 0.25rem">From:</div>
+          <b>{{ row.from_field }}</b>
+        </div>
+        <div class="flex">
+          <div style="width: 4rem; margin-right: 0.25rem">Sent:</div>
+          <b>{{ row.date_timestamp }}</b>
+        </div>
 
-      <hr />
-      <p v-html="row.body"></p>
-      <!-- <p v-html="row.body.replaceAll('    ', '<br/><br/>')"></p> -->
-      <div class="attachment-panel" v-if="row.attachments?.length">
-        <h3>Attachments:</h3>
-        <div v-for="attachment in row.attachments">
-          <a :href="attachment.url">{{ attachment.filename }}</a>
+        <hr />
+
+        <p v-html="row.body"></p>
+        <!-- <p v-html="row.body.replaceAll('    ', '<br/><br/>')"></p> -->
+        <div class="attachment-panel" v-if="row.attachments?.length">
+          <h3>Attachments:</h3>
+          <div v-for="attachment in row.attachments">
+            <a :href="attachment.url">{{ attachment.filename }}</a>
+          </div>
         </div>
       </div>
     </div>
