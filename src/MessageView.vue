@@ -94,6 +94,12 @@ export default defineComponent({
         json = response[0].values.map((row: any[]) => {
           const obj = {} as any;
           columns.forEach((col, i) => (obj[col] = row[i]));
+
+          // fix newlines __NL__
+          if (obj.body) {
+            obj.body = obj.body.replaceAll('__NL__', '<br/>');
+          }
+
           // scrub email addresses
           if (obj.from_field) {
             let email = obj.from_field as string;
