@@ -30,20 +30,16 @@ export default defineComponent({
 
   computed: {
     routerView() {
-      console.log('11');
       const path = this.currentPath.slice(1) || '/';
 
-      console.log('12', path);
       if (path.startsWith('/message')) return MessageView;
       return SearchResultsView;
     },
 
     currentMessages() {
       const path = this.currentPath.slice(1) || '/';
-      console.log({ path });
       if (!path.startsWith('/message')) return null;
       let message = path.slice(9);
-      console.log({ message });
       if (message.includes('?')) message = message.slice(0, message.indexOf('?'));
 
       const details = this.query('messages', { message });
@@ -81,13 +77,6 @@ export default defineComponent({
     const query = this.db.exec("SELECT name FROM sqlite_master where type='table';");
     const tables = query[0].values.flat();
     console.log({ tables });
-
-    // initial view
-
-    // this.query('messages');
-    // const messages = this.query('messages');
-    // console.log({ messages });
-    // this.results = messages.slice(0, 100);
   },
 
   methods: {
@@ -126,9 +115,11 @@ export default defineComponent({
       const response = this.db.exec(query);
 
       const json = this.convertQueryArrayToObject(response);
-      const clipped = json.slice(0, 100);
+      const clipped = json.slice(0, 250);
 
-      if (options?.message) return clipped;
+      if (options?.message) {
+        return clipped;
+      }
 
       // back to search results view. this is probably in the wrong place
       window.location.hash = '/';
@@ -187,8 +178,11 @@ export default defineComponent({
           return obj;
         });
       }
-      const clipped = answer.slice(0, 100);
-      if (options?.message) return clipped;
+
+      const clipped = answer.slice(0, 250);
+      if (options?.message) {
+        return clipped;
+      }
 
       // back to search results view. this is probably in the wrong place
       // this.currentPath = '/'; // window.location.hash;
@@ -235,8 +229,19 @@ export default defineComponent({
   </div>
 
   <component :is="routerView" :results="results" :messages="currentMessages" :db="db" />
+
+  <p id="info-text" style="font-size: 14px">
+    <hr/>
+    Messages from 2001-2023 are all in the archive database. Due to multiple server transitions over
+    decades of operation, some individual messages may not appear in their threaded conversation.
+    Those messages all still exist! -- but may require searching for the person's name or the
+    message subject.
+    <hr/>
+  </p>
+
 </template>
 
 <style scoped>
 @import './style.css';
+
 </style>

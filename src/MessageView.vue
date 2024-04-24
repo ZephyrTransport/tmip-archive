@@ -70,8 +70,10 @@ export default defineComponent({
 
       this.threadMessages = threadMessages;
 
-      // think about this -- do we always want this?
-      // window.scrollTo(0, 0);
+      // scroll to top if on mobile
+      if (window.matchMedia('(max-width: 640px)').matches) {
+        window.scrollTo(0, 400);
+      }
     },
 
     query(table: string, options?: any) {
