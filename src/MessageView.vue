@@ -69,6 +69,9 @@ export default defineComponent({
       console.log({ threadMessages });
 
       this.threadMessages = threadMessages;
+
+      // think about this -- do we always want this?
+      // window.scrollTo(0, 0);
     },
 
     query(table: string, options?: any) {
@@ -122,15 +125,15 @@ export default defineComponent({
     <div class="message-pane">
       <div v-for="row in messages">
         <div class="flex">
-          <div style="width: 4rem; margin-right: 0.25rem">Subject:</div>
+          <div class="msg-header">Subject:</div>
           <b>{{ row.subject }}</b>
         </div>
         <div class="flex">
-          <div style="width: 4rem; margin-right: 0.25rem">From:</div>
+          <div class="msg-header">From:</div>
           <b>{{ row.from_field }}</b>
         </div>
         <div class="flex">
-          <div style="width: 4rem; margin-right: 0.25rem">Sent:</div>
+          <div class="msg-header">Sent:</div>
           <b>{{ row.date_timestamp }}</b>
         </div>
 
@@ -148,17 +151,17 @@ export default defineComponent({
     </div>
 
     <div class="thread" v-if="threadMessages.length">
-      <p style="margin-bottom: 0.5rem; font-weight: bold; text-transform: uppercase">Thread:</p>
+      <p style="margin-bottom: 8px; font-weight: bold; text-transform: uppercase">Thread:</p>
       <div
         v-for="(message, i) in threadMessages"
         class="thread-message"
         :style="{
-          marginLeft: !!i ? '0.75rem' : '',
+          marginLeft: !!i ? '16px' : '',
           backgroundColor: message.rowid == (messages && messages[0].rowid) ? '#cfd' : '',
         }"
       >
         <a :href="`#/message/${message.rowid}`">
-          {{ message.from_field }}
+          <span style="font-weight: bold">{{ message.from_field }}</span>
           <span v-if="i == 0"><br />{{ message.date_timestamp }}</span>
           <br /><span style="color: #88b">{{ message.subject }}</span>
         </a>

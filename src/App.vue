@@ -121,16 +121,13 @@ export default defineComponent({
         `SELECT rowid,* FROM ${table} WHERE` +
         ` from_field LIKE '%${options.search}%'` +
         ` OR subject LIKE '%${options.search}%'` +
-        ` ORDER BY date_timestamp ASC;`;
+        ` ORDER BY date_timestamp DESC;`;
 
-      console.log(query);
       const response = this.db.exec(query);
 
       const json = this.convertQueryArrayToObject(response);
       const clipped = json.slice(0, 100);
-      console.log(clipped);
 
-      console.log(333, options);
       if (options?.message) return clipped;
 
       // back to search results view. this is probably in the wrong place
@@ -139,7 +136,6 @@ export default defineComponent({
     },
 
     query(table: string, options?: any) {
-      console.log(1000, table, options);
       if (!this.db) return [];
 
       let query = `SELECT rowid,* FROM ${table} ORDER BY date_timestamp ASC`;
@@ -158,7 +154,6 @@ export default defineComponent({
 
       query += ';';
 
-      console.log(query);
       const response = this.db.exec(query);
 
       let answer = [] as any;
@@ -171,6 +166,10 @@ export default defineComponent({
           // fix newlines __NL__
           if (obj.body) {
             obj.body = obj.body.replaceAll('__NL__', '<br/>');
+            obj.body = obj.body.replaceAll(
+              '#####################################################################',
+              '###'
+            );
           }
 
           // scrub email addresses
@@ -185,9 +184,6 @@ export default defineComponent({
         });
       }
       const clipped = answer.slice(0, 100);
-      console.log(clipped);
-
-      console.log(333, options);
       if (options?.message) return clipped;
 
       // back to search results view. this is probably in the wrong place
@@ -215,7 +211,6 @@ export default defineComponent({
       // fetch & uncompress archive
       const archive = await (await fetch(DB_PATH)).arrayBuffer();
       const buffer = decoder.decode(new Uint8Array(archive));
-      console.log('DB BUFFER bytes', buffer.byteLength);
 
       return buffer;
     },
