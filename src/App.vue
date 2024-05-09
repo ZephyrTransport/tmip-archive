@@ -1,8 +1,34 @@
-<script lang="ts">
-// TMIP Archive Vue Application
-// Questions / PRs, contact Billy Charlton <mail@billyc.cc>
-// ----------------------------------------------------------------
+<!-- TMIP Archive Vue Application
+     Questions / PRs, contact Billy Charlton <mail@billyc.cc>
+---------------------------------------------------------------- -->
+<template>
+  <div class="top-bar" v-show="showSearch">
+    <h3>Search the TMIP email list archive</h3>
 
+    <input
+      class="input is-link"
+      style="flex: 1"
+      type="text"
+      placeholder="Search..."
+      v-model="searchTerm"
+    />
+  </div>
+
+  <component :is="routerView" :results="results" :messages="currentMessages" :db="db" />
+
+  <div v-show="showSearch">
+    <hr />
+    <p id="info-text" style="font-size: 14px">
+      Messages from 2001-2023 are all in the archive database. Due to multiple server transitions
+      over decades of operation, some individual messages may not appear in their threaded
+      conversation. Those messages all still exist! -- but may require searching for the person's
+      name or the message subject.
+    </p>
+    <hr />
+  </div>
+</template>
+
+<script lang="ts">
 const DB_PATH = '/tmip-archive-assets/tmip.db.zst';
 
 import { defineComponent } from 'vue';
@@ -13,15 +39,18 @@ import debounce from 'debounce';
 
 import SearchResultsView from './SearchResultsView.vue';
 import MessageView from './MessageView.vue';
+import WebinarsListView from './WebinarsListView.vue';
+import WebinarView from './WebinarView.vue';
 
 export default defineComponent({
-  components: { SearchResultsView, MessageView },
+  components: { WebinarsListView, WebinarView, SearchResultsView, MessageView },
 
   data() {
     return {
       results: [] as any[],
       db: null as null | Database,
       searchTerm: '',
+      showSearch: true,
       debounceQuery: {} as any,
       debounceQuerySearchTerm: {} as any,
       currentPath: '',
@@ -30,9 +59,19 @@ export default defineComponent({
 
   computed: {
     routerView() {
+      if (!this.db) return SearchResultsView;
+
       const path = this.currentPath.slice(1) || '/';
 
+      this.showSearch = false;
+
+      if (path.indexOf('/webinar/') > -1) return WebinarView;
+      if (path.indexOf('/webinars') > -1) return WebinarsListView;
+
+      this.showSearch = true;
+
       if (path.startsWith('/message')) return MessageView;
+
       return SearchResultsView;
     },
 
@@ -62,6 +101,9 @@ export default defineComponent({
     console.log(urlParams);
 
     this.currentPath = window.location.hash;
+
+    console.log(555, this.currentPath);
+
     window.addEventListener('hashchange', () => {
       console.log('PING!');
       this.currentPath = window.location.hash;
@@ -73,10 +115,10 @@ export default defineComponent({
     this.db = await this.initializeDatabaseFromBuffer(buffer);
     console.log('--DONE LOADING DATABASE');
 
-    //tables
-    const query = this.db.exec("SELECT name FROM sqlite_master where type='table';");
-    const tables = query[0].values.flat();
-    console.log({ tables });
+    // //tables
+    // const query = this.db.exec("SELECT name FROM sqlite_master where type='table';");
+    // const tables = query[0].values.flat();
+    // console.log({ tables });
   },
 
   methods: {
@@ -216,32 +258,6 @@ export default defineComponent({
 });
 </script>
 
-<template>
-  <div class="top-bar">
-    <input
-      class="input is-link"
-      style="flex: 1"
-      type="text"
-      placeholder="Search..."
-      v-model="searchTerm"
-    />
-    <button class="button is-link">Search</button>
-  </div>
-
-  <component :is="routerView" :results="results" :messages="currentMessages" :db="db" />
-
-  <p id="info-text" style="font-size: 14px">
-    <hr/>
-    Messages from 2001-2023 are all in the archive database. Due to multiple server transitions over
-    decades of operation, some individual messages may not appear in their threaded conversation.
-    Those messages all still exist! -- but may require searching for the person's name or the
-    message subject.
-    <hr/>
-  </p>
-
-</template>
-
 <style scoped>
 @import './style.css';
-
 </style>
