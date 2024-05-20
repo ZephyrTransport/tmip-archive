@@ -123,6 +123,16 @@ export default defineComponent({
             obj.body = obj.body.replaceAll('__NL__', '<br/>');
           }
 
+          // fix attachment URLs
+          if (obj.body) {
+            obj.body = obj.body.replaceAll('target="blank"', 'target="_blank"');
+            obj.body = obj.body.replaceAll(
+              '/sites/freightmodelimprovementprogram.localhost/files/webinars/',
+              'https://github.com/ZephyrTransport/tmip-archive/raw/main/public/webinars/'
+            );
+            console.log(111, obj.body);
+          }
+
           // scrub email addresses
           if (obj.from_field) {
             let email = obj.from_field as string;

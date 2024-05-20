@@ -3,7 +3,11 @@
      ---------------------------------------------------- -->
 <template>
   <div class="webinar-panel">
+    <a href="/TMIP"><p>&laquo; Back to TMIP</p></a>
     <h1>TMIP WEBINARS</h1>
+
+    <p>This is the complete list of archived TMIP webinars from 2007-2023.</p>
+    <br />
 
     <div class="webinar-table">
       <div v-for="row in webinars" :key="row.rowid" class="webinar-card" :style="getCardColor()">
@@ -61,7 +65,6 @@ export default defineComponent({
     getCardColor() {
       return {
         backgroundColor: '#eeeef6',
-        borderRadius: '8px',
       };
     },
 
