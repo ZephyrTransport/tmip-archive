@@ -1,0 +1,26 @@
+Answered Questions (0)
+--------------------------
+Open Questions (22)
+--------------------------
+1. hary mitcrpc lansing: yes, i'm reading the pdf
+2. hary mitcrpc lansing: i'm ex-climate modeler/weather forecaster.. need opinion ?
+3. Scott Ramming: How long does each speed-balancing iteration take to run?
+4. Robert Farley; LA Co. MTA: Rather than specifying a number of iterations, have you considered a degree of convergence of matrices?  {e.g. "misplaced flows" or "change in impedance" less than X?}
+5. NCTCOG: How long does it take to run a full model run?
+6. Lee Cryer, Regional Transportation District, Denver: Is no new cordon line survey planned ever due to privacy concerns or other reasons?
+7. Lee Cryer, Regional Transportation District, Denver: Never mind, I spoke too soon.
+8. MWCOG: Do you have model documentation on your website?
+9. Robert Farley; LA Co. MTA: Please consider a different averaging than MSA - MSA freezes in early "errors"
+10. SEMCOG: what is your convergence criteria for full model run
+11. paul balmacund: so stochastic error and uncertainty is NOT currently being handled ? 
+12. NCTCOG: What is the convergence criteria for the traffic assignment?
+13. paul balmacund: I don't know if Sierra Club will accept that answer 
+14. Yuanjun Li: Did you always have univ/college/school as separate categories?
+15. Yuanjun Li: What is the % of those of total pop?
+16. Scott Ramming: You have to wait 20 years to find out how wrong the traffic forecasts were.
+17. paul balmacund: weather forecasts have probability
+18. Yuanjun Li: % of college/school trips of total?
+19. Ming-Bang Shyu: Can we get these question slides?? especially what to do in the conference
+20. Doug Laird, FHWA: weather forecasting is a respectable profession
+21. odot/morpc: Also, we just noticed that I typed in Zhuojun's phone number wrong.  It's supposed to be 614-233-4147.
+22. odot/morpc: Thank!!  We're curious to see them.

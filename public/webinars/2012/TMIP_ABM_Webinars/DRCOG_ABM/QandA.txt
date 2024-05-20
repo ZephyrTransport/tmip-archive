@@ -1,0 +1,12 @@
+Answered Questions (0)
+--------------------------
+Open Questions (8)
+--------------------------
+1. Tara Weidner: How are the candidate point/parcels (for monte carlo disaggregation from TAZ) updated for use in future scenarios?
+2. Wu Sun: How do you deal with model result variations due to Monte Carlo simulation?
+3. Tara Weidner: Can you elaborate on what your VBA-enabled spreadsheet queries while the model is running?  What is the goals of that effort (e.g,  to check inputs are correct and/or model estimated finish time, other?)
+4. Wu Sun: Do you run your ABM and land use model sequentially into horizon year with feedback between the two models? 
+5. hary: i would like to learn your program, what is the license agreement here ? GPL, Opensource, or closed ?
+6. Atkins: What kind of model run times is DRCOG seeing with what kind of computer hardware?
+7. Tara Weidner: What non-motorized accessibilities do you use in the mode choice model, without an explicit bike/ped network?
+8. bill allen: What will you have to do to make Focus acceptable to FTA?

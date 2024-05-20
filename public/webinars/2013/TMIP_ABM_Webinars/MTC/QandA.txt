@@ -1,0 +1,17 @@
+Answered Questions (0)
+--------------------------
+Open Questions (13)
+--------------------------
+1. Robert Farley; LA Co MTA:When you run the full model, how do you monetize/report the benefits/costs of substituted destinations and/or foregone trips?
+2. Robert Farley; LA Co MTA:Your RTP No Project seems to have large decreases in VMT.  Why is that?
+3. Robert Farley; LA Co MTA:How do you avoid reporting the land use development economic benefit by county?  By landowner?
+4. Clint Daniels:Did you use UrbanSim results directly, or was their any "tuning" of the land use outputs to conform to the analysts and stakeholders opinions?
+5. Chi Lam:UrbanSim simulates individual person and households. Could UrbanSim replace population synthesizer?
+6. Robert Farley; LA Co MTA:I'm referring to the discord that arises when different counties benefit from different plans
+7. CNYPlanner:what modeling platform (software)do you use
+8. SEMCOG:what is your ABM development cost?
+9. hary mitcrpc lansing:check: http://analytics.mtc.ca.gov/foswiki/Main/InputFiles , MTC use Cube
+10. MWCOG:Thank you for an excellent webinar!  In addition to what was presented today, do you have a report or document that discusses the main motivations for transitioning to the ABM and the lessons learned from your transition, including, possibly, things you would have done differently?
+11. CNYPlanner:howlong did it take your consultant to get the model calibrated well enough so that it could be used?
+12. Billy C:well played, thanks dave!
+13. hary mitcrpc lansing:What components and data did you 'steal' from other MPO ?

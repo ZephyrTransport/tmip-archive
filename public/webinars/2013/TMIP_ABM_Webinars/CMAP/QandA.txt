@@ -1,0 +1,18 @@
+Answered Questions (0)
+--------------------------
+Open Questions (14)
+--------------------------
+1. RSA: Do you have a pipeline mode?
+2. RSA: How do you choose between the competing Class I RRs?
+3. Deng Bang Lee: which year's make and use coefficient used in the study?
+4. Deng Bang Lee: explain one more time, why the FAF3 was used in the study.
+5. Deng Bang Lee: how to you determine truck load.. % of light heavy, % or heavy heavy truck?
+6. Monique Stinson Urban: I'm not seeing any questions
+7. MAG: How were you able to develop a touring model using commodity flow db where records show delinked flows?
+8. Bll McFarlane: Where to you get information on how to estimate travel times and costs by mode throughout the counrty?
+9. Kevin Feldt: How does this model integrate into a typical regional model using TransCAD?
+10. MAG: A combination of mode and equipment typefields can be used to decide if hauling has been made by Heavy trucks or by Medium trucks.
+11. John: Is the software coded on R mentioned during presentation available now?
+12. Dan Beagan: Please remove the survey so we can see the questions
+13. guest 2: How will CMAP use this model day-to-day? Please comment on the relevancy with your planning process
+14. guest 2: Budget for this project?

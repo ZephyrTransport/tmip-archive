@@ -1,0 +1,7 @@
+Question: In terms of transit line boardings, which does better in base year... ABM or TBM?
+
+Answer:ABM displays the appropriate sensitivities when we compared it to the base your results and also existing trip-based model runs in terms of transit line boardings as well as matching traffic count data. When both models were put in the forecasting mode and run for future year, there is more boardings in ABM meaning there's more sensitivities that are built within mode choice whereas trip-based model is very limiting. The same observation was also made in the case of transit station boardings - ABM model run resulted in higher numbers.
+
+Question: How did you come to the decision to use toll as mode choice instead of  route choice?  Are there any issues in assigning the toll trips on to the network meaning there is any discrepancy between the predicted vs assigned toll trips?
+
+Answer: Not answered since the question was asked after the session had ended.

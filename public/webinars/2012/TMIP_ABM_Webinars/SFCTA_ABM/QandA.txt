@@ -1,0 +1,14 @@
+Answered Questions (1)
+--------------------------
+1. Guest_RSG: Has using an ABM resulted in better validation of transit in the base scenario?
+* Brian Grady: Advantages of ABM - a given. Disadvantages/challenges?
+
+Open Questions (6)
+--------------------------
+2. Guest_RSG: Test question
+3. Tushar Patel: Have you validated with any  Bike or  Walk improvements?
+4. Guest_RSG: What are some of the transit improvement scenarios that you have evaluated?
+5. ODOT TPAU: Have you considered google car impacts, SF is an early pilot I think?
+6. ODOT TPAU: What are the health affects that you have analyzed?
+7. Portland Metro: Please describe the integration of UrbanSim with your Activity-Based Model.
+
