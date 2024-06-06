@@ -12,6 +12,48 @@
       placeholder="Search..."
       v-model="searchTerm"
     />
+
+    <h4>Advanced filters</h4>
+    <div class="advanced-filters flex-row" style="gap: 0.25rem">
+      <div class="flex1 flex-col advanced">
+        <p>Sender</p>
+        <input
+          class="input is-link"
+          style="flex: 1"
+          type="text"
+          placeholder="Name"
+          v-model="author"
+        />
+      </div>
+      <div class="flex1 flex-col advanced">
+        <p>Subject</p>
+        <input
+          class="input is-link"
+          style="flex: 1"
+          type="text"
+          placeholder="Subject"
+          v-model="subject"
+        />
+      </div>
+      <div class="flex1 flex-col advanced">
+        <p>Start Date</p>
+        <vue-date-picker
+          v-model="dateFrom"
+          :enable-time-picker="false"
+          :auto-apply="true"
+          format="yyyy-MM-dd"
+        ></vue-date-picker>
+      </div>
+      <div class="flex1 flex-col advanced">
+        <p>End Date</p>
+        <vue-date-picker
+          v-model="dateTo"
+          :enable-time-picker="false"
+          :auto-apply="true"
+          format="yyyy-MM-dd"
+        ></vue-date-picker>
+      </div>
+    </div>
   </div>
 
   <component :is="routerView" :results="results" :messages="currentMessages" :db="db" />
@@ -36,6 +78,7 @@ import { ZSTDDecoder } from 'zstddec'
 import initSQL, { Database } from 'sql.js'
 import sqlWasm from 'sql.js/dist/sql-wasm.wasm?url'
 import debounce from 'debounce'
+import VueDatePicker from '@vuepic/vue-datepicker'
 
 import SearchResultsView from './SearchResultsView.vue'
 import MessageView from './MessageView.vue'
@@ -43,7 +86,7 @@ import WebinarsListView from './WebinarsListView.vue'
 import WebinarView from './WebinarView.vue'
 
 export default defineComponent({
-  components: { WebinarsListView, WebinarView, SearchResultsView, MessageView },
+  components: { WebinarsListView, WebinarView, SearchResultsView, MessageView, VueDatePicker },
 
   data() {
     return {
@@ -54,6 +97,12 @@ export default defineComponent({
       debounceQuery: {} as any,
       debounceQuerySearchTerm: {} as any,
       currentPath: '',
+      author: '',
+      subject: '',
+      dateFrom: null as null | Date,
+      dateTo: null as null | Date,
+      startDate: '',
+      endDate: '',
     }
   },
 
@@ -78,6 +127,8 @@ export default defineComponent({
     currentMessages() {
       const path = this.currentPath.slice(1) || '/'
       if (!path.startsWith('/message')) return null
+
+      // fetch individual message
       let message = path.slice(9)
       if (message.includes('?')) message = message.slice(0, message.indexOf('?'))
 
@@ -89,7 +140,41 @@ export default defineComponent({
   watch: {
     searchTerm() {
       this.results = []
-      this.debounceQuerySearchTerm('messages', { search: this.searchTerm })
+      this.debounceQuerySearchTerm()
+    },
+    author() {
+      this.results = []
+      this.debounceQuerySearchTerm()
+    },
+    subject() {
+      this.results = []
+      this.debounceQuerySearchTerm()
+    },
+    dateFrom() {
+      const date = this.dateFrom
+      if (!date) {
+        this.startDate = ''
+      } else {
+        const day = date.getDate().toString().padStart(2, '0')
+        const month = (date.getMonth() + 1).toString().padStart(2, '0')
+        const year = date.getFullYear().toString().padStart(2, '0')
+        this.startDate = `${year}-${month}-${day}`
+      }
+      this.results = []
+      this.debounceQuerySearchTerm()
+    },
+    dateTo() {
+      const date = this.dateTo
+      if (!date) {
+        this.endDate = ''
+      } else {
+        const day = date.getDate().toString().padStart(2, '0')
+        const month = (date.getMonth() + 1).toString().padStart(2, '0')
+        const year = date.getFullYear().toString().padStart(2, '0')
+        this.endDate = `${year}-${month}-${day}`
+      }
+      this.results = []
+      this.debounceQuerySearchTerm()
     },
   },
 
@@ -122,6 +207,13 @@ export default defineComponent({
   },
 
   methods: {
+    dateFormat(date: Date) {
+      const day = date.getDate()
+      const month = date.getMonth() + 1
+      const year = date.getFullYear()
+      return `${year}-${month}-${day}`
+    },
+
     convertQueryArrayToObject(response: any[]) {
       let json = [] as any
 
@@ -144,24 +236,47 @@ export default defineComponent({
       return json
     },
 
-    getMessagesForSearchTerm(table: string, options?: any) {
-      console.log('GET THREADS', table, options)
+    // this.debounceQuerySearchTerm('messages', { search: this.searchTerm })
+
+    // getMessagesForSearchTerm(table: string, options?: any) {
+    getMessagesForSearchTerm() {
+      const table = 'messages'
       if (!this.db) return []
 
-      let query =
-        `SELECT rowid,* FROM ${table} WHERE` +
-        ` from_field LIKE '%${options.search}%'` +
-        ` OR subject LIKE '%${options.search}%'` +
-        ` ORDER BY date_timestamp DESC;`
+      // build options query
+      let select = `SELECT rowid,* FROM ${table} WHERE `
+
+      const terms = [] as string[]
+
+      if (this.searchTerm) {
+        terms.push(
+          `(from_field LIKE '%${this.searchTerm}%'` + ` OR subject LIKE '%${this.searchTerm}%')`
+        )
+      }
+
+      if (this.author) terms.push(`from_field LIKE '%${this.author}%'`)
+      if (this.subject) terms.push(`subject LIKE '%${this.subject}%'`)
+      if (this.startDate) terms.push(`date_timestamp > '${this.startDate}'`)
+      if (this.endDate) terms.push(`date_timestamp < '${this.endDate}'`)
+
+      const allTerms = terms.join(' AND ')
+      const order = ` ORDER BY date_timestamp DESC;`
+
+      let query = select + allTerms + order
+
+      console.log(query)
+
+      if (!allTerms.length && !this.searchTerm) return []
 
       const response = this.db.exec(query)
 
       const json = this.convertQueryArrayToObject(response)
-      const clipped = json.slice(0, 250)
+      // max 250 responses
+      const clipped = json.slice(0, 300)
 
-      if (options?.message) {
-        return clipped
-      }
+      // if (options?.message) {
+      //   return clipped
+      // }
 
       // back to search results view. this is probably in the wrong place
       window.location.hash = '/'
@@ -258,8 +373,11 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-/* @import './css/zephyr-2020.css'; */
-/* @import './css/landing-page.css'; */
+<style>
+@import './css/zephyr-2020.css';
+@import './css/landing-page.css';
+
 @import './css/style.css';
+
+@import '@vuepic/vue-datepicker/dist/main.css';
 </style>

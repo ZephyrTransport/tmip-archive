@@ -243,6 +243,22 @@ button:focus-visible {
   font-weight: bold;
 }
 
+.advanced-filters {
+  display: flex;
+  flex-direction: row;
+}
+
+.advanced {
+  margin-top: -1rem;
+  p {
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #449;
+    font-weight: bold;
+    margin-bottom: 0;
+  }
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -262,6 +278,10 @@ button:focus-visible {
     padding: 0;
     width: 100%;
     color: rgb(51, 51, 51);
+  }
+
+  .advanced-filters {
+    flex-direction: column;
   }
 
   .message-panel {

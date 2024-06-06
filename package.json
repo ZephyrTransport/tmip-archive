@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vuepic/vue-datepicker": "^8.7.0",
     "debounce": "^2.0.0",
     "sql.js": "^1.10.2",
     "vue": "^3.4.21",

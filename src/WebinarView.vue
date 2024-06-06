@@ -49,6 +49,7 @@ export default defineComponent({
   computed: {
     cleanBody() {
       let body = this.webinar.body as string
+
       // strip formatting
       body = body
         .replaceAll('font-size:', 'xfont-size:')
