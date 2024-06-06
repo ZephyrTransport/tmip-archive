@@ -20,6 +20,17 @@
       ></button>
     </div>
 
+    <h4>Year:</h4>
+    <div class="year-list">
+      <button
+        v-for="year in years"
+        :class="{ 'is-active': year == currentYear }"
+        @click="currentYear = year"
+      >
+        {{ ` ${year} ` }}
+      </button>
+    </div>
+
     <div class="webinar-table">
       <div v-for="row in webinars" :key="row.rowid" class="webinar-card" :style="getCardColor()">
         <a :href="`#/webinar/${row.rowid}`">
@@ -33,6 +44,7 @@
         </a>
       </div>
     </div>
+    <p v-show="!webinars.length"><i>&nbsp;&nbsp;No webinars match your current filters.</i></p>
   </div>
 </template>
 
@@ -53,6 +65,8 @@ export default defineComponent({
     return {
       webinars: [] as any[],
       threadMessages: [] as any[],
+      years: [...Array(17).keys()].reverse().map(n => n + 2007) as any[],
+      currentYear: 'All' as any,
       currentCategory: 0,
       categories: [
         'All',
@@ -73,6 +87,8 @@ export default defineComponent({
   computed: {},
 
   async mounted() {
+    this.years.unshift('All')
+    console.log(this.years)
     this.listWebinars()
   },
 
@@ -82,6 +98,9 @@ export default defineComponent({
       this.getThread()
     },
     currentCategory() {
+      this.listWebinars()
+    },
+    currentYear() {
       this.listWebinars()
     },
   },
@@ -101,9 +120,13 @@ export default defineComponent({
       const filter = {} as any
       if (category !== 'All') filter.category = category
 
-      const webinars = await this.query('webinars', filter)
+      let webinars = (await this.query('webinars', filter)) as any[]
 
-      webinars.sort((a: any, b: any) => (a.date_timestamp < b.date_timestamp ? 1 : -1))
+      if (this.currentYear !== 'All') {
+        webinars = webinars.filter(w => w.date_timestamp.startsWith(this.currentYear))
+      }
+
+      webinars.sort((a, b) => (a.date_timestamp < b.date_timestamp ? 1 : -1))
       console.log({ webinars })
 
       if (webinars) this.webinars = webinars
