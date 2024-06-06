@@ -7,7 +7,18 @@
     <h1>TMIP WEBINARS</h1>
 
     <p>This is the complete list of archived TMIP webinars from 2007-2023.</p>
-    <br />
+
+    <h4>Category:</h4>
+
+    <div class="webinar-categories">
+      <button
+        v-for="(category, i) in categories"
+        :key="category"
+        v-html="category"
+        :class="{ 'is-active': currentCategory == i }"
+        @click="currentCategory = i"
+      ></button>
+    </div>
 
     <div class="webinar-table">
       <div v-for="row in webinars" :key="row.rowid" class="webinar-card" :style="getCardColor()">
@@ -42,6 +53,18 @@ export default defineComponent({
     return {
       webinars: [] as any[],
       threadMessages: [] as any[],
+      currentCategory: 0,
+      categories: [
+        'All',
+        'Activity Based Modeling',
+        'Dynamic Traffic<br/>Assignment (DTA)',
+        'Land Use Modeling',
+        'Model Validation,<br/>Verification and Checking',
+        'Exploratory Modeling<br/>and Simulation',
+        'Strategic and<br/>Sketch Modeling',
+        'Traditional and<br/>Emerging Data',
+        'Travel Model<br/>Development',
+      ],
       // results: [] as any[],
       // searchTerm: '',
     }
@@ -58,6 +81,9 @@ export default defineComponent({
       this.findAttachments()
       this.getThread()
     },
+    currentCategory() {
+      this.listWebinars()
+    },
   },
 
   methods: {
@@ -68,7 +94,14 @@ export default defineComponent({
     },
 
     async listWebinars() {
-      const webinars = await this.query('webinars', {})
+      // filter on category
+      let category = this.categories[this.currentCategory]
+      category = category.replaceAll('<br/>', ' ')
+
+      const filter = {} as any
+      if (category !== 'All') filter.category = category
+
+      const webinars = await this.query('webinars', filter)
 
       webinars.sort((a: any, b: any) => (a.date_timestamp < b.date_timestamp ? 1 : -1))
       console.log({ webinars })
