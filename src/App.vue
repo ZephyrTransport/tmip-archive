@@ -258,8 +258,8 @@ export default defineComponent({
 })
 </script>
 
-<style>
-@import './css/zephyr-2020.css';
-@import './css/landing-page.css';
+<style scoped>
+/* @import './css/zephyr-2020.css'; */
+/* @import './css/landing-page.css'; */
 @import './css/style.css';
 </style>
