@@ -15,7 +15,7 @@
       <p>Webinar {{ webinar.rowid }}</p>
     </div>
 
-    <p v-html="webinar.body"></p>
+    <p class="webinar-body" v-html="cleanBody"></p>
 
     <div class="attachment-panel" v-if="webinar.attachments?.length">
       <h3>Attachments:</h3>
@@ -46,10 +46,34 @@ export default defineComponent({
     }
   },
 
-  computed: {},
+  computed: {
+    cleanBody() {
+      let body = this.webinar.body as string
+      // strip formatting
+      body = body
+        .replaceAll('font-size:', 'xfont-size:')
+        .replaceAll('font-weight:', 'xfont-weight:')
+        .replaceAll('font-family:', 'xfont-family:')
+        .replaceAll('color:', 'xcolor:')
+        .replaceAll('background-color:', 'xbackground-color:')
+
+      return body
+
+      // re-link raw links -- skip for now, buggy
+      console.log({ body })
+      const urlPattern = /([^"](http|https):\/\/[^\s,<>"]+)/g
+      const fixed = body.replace(urlPattern, raw => {
+        const prefix = raw.substring(0, 1)
+        const url = raw.substring(1)
+        console.log(1, raw)
+        return `${prefix}<a href="${url}">${url}</a>`
+      })
+      console.log({ fixed })
+      return fixed
+    },
+  },
 
   async mounted() {
-    console.log('WEBINARVIEW HERE')
     const hash = window.location.hash
     const idx = hash.indexOf('/webinar/')
     if (idx > -1) this.hash = hash.substring(idx + 9)
@@ -89,9 +113,7 @@ export default defineComponent({
     },
 
     query(table: string, options?: any) {
-      console.log(1)
       if (!this.db) return []
-      console.log(2)
 
       const keys = Object.keys(options) || []
       const wheres = keys.map(key => `${key} = '${options[key]}'`)
