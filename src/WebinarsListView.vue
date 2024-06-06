@@ -26,12 +26,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
-import { Database } from 'sql.js';
+import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
+import { Database } from 'sql.js'
 
-const ATTACH_RAW_URL =
-  'https://github.com/ZephyrTransport/tmip-archive/raw/main/public/attachments';
+const ATTACH_RAW_URL = 'https://github.com/ZephyrTransport/tmip-archive/raw/main/public/attachments'
 
 export default defineComponent({
   props: {
@@ -45,19 +44,19 @@ export default defineComponent({
       threadMessages: [] as any[],
       // results: [] as any[],
       // searchTerm: '',
-    };
+    }
   },
 
   computed: {},
 
   async mounted() {
-    this.listWebinars();
+    this.listWebinars()
   },
 
   watch: {
     messages() {
-      this.findAttachments();
-      this.getThread();
+      this.findAttachments()
+      this.getThread()
     },
   },
 
@@ -65,104 +64,104 @@ export default defineComponent({
     getCardColor() {
       return {
         backgroundColor: '#eeeef6',
-      };
+      }
     },
 
     async listWebinars() {
-      const webinars = await this.query('webinars', {});
+      const webinars = await this.query('webinars', {})
 
-      webinars.sort((a: any, b: any) => (a.date_timestamp < b.date_timestamp ? 1 : -1));
-      console.log({ webinars });
+      webinars.sort((a: any, b: any) => (a.date_timestamp < b.date_timestamp ? 1 : -1))
+      console.log({ webinars })
 
-      if (webinars) this.webinars = webinars;
+      if (webinars) this.webinars = webinars
     },
 
     async findAttachments() {
-      if (!this.messages?.length) return;
+      if (!this.messages?.length) return
 
       for (const row of this.messages) {
-        const post_id = row.message_id || row.id;
-        const attachments = this.query('message_attachments', { post_id });
+        const post_id = row.message_id || row.id
+        const attachments = this.query('message_attachments', { post_id })
         const withURLs = attachments.map((a: any) => {
           const att = {
             url: `${ATTACH_RAW_URL}/${a.attachment_filename}`,
             filename: a.attachment_filename,
-          };
-          return att;
-        });
-        console.log({ withURLs });
-        row.attachments = withURLs;
+          }
+          return att
+        })
+        console.log({ withURLs })
+        row.attachments = withURLs
       }
     },
 
     async getThread() {
-      console.log('FIND THREAD');
-      if (!this.messages?.length) return;
+      console.log('FIND THREAD')
+      if (!this.messages?.length) return
 
-      const message = this.messages[0];
-      console.log({ message });
-      console.log(message.thread);
+      const message = this.messages[0]
+      console.log({ message })
+      console.log(message.thread)
 
-      const threadMessages = this.query('messages', { thread: message.thread });
-      console.log({ threadMessages });
+      const threadMessages = this.query('messages', { thread: message.thread })
+      console.log({ threadMessages })
 
-      this.threadMessages = threadMessages;
+      this.threadMessages = threadMessages
 
       // scroll to top if on mobile
       if (window.matchMedia('(max-width: 640px)').matches) {
-        window.scrollTo(0, 400);
+        window.scrollTo(0, 400)
       }
     },
 
     query(table: string, options?: any) {
-      console.log(1);
-      if (!this.db) return [];
-      console.log(2);
+      console.log(1)
+      if (!this.db) return []
+      console.log(2)
 
-      const keys = Object.keys(options) || [];
-      const wheres = keys.map(key => `${key} = '${options[key]}'`);
-      const whereClause = wheres.join(' OR ');
-      let query = `SELECT rowid,* FROM ${table}`;
-      if (whereClause) query += ` WHERE ${whereClause}`;
-      query += ';';
+      const keys = Object.keys(options) || []
+      const wheres = keys.map(key => `${key} = '${options[key]}'`)
+      const whereClause = wheres.join(' OR ')
+      let query = `SELECT rowid,* FROM ${table}`
+      if (whereClause) query += ` WHERE ${whereClause}`
+      query += ';'
 
-      console.log(query);
+      console.log(query)
 
-      let response = this.db.exec(query);
-      console.log({ response });
-      let json = this.convertQueryArrayToObject(response);
-      json = json.filter((webinar: any) => !!webinar.subject);
-      console.log({ json });
-      return json;
+      let response = this.db.exec(query)
+      console.log({ response })
+      let json = this.convertQueryArrayToObject(response)
+      json = json.filter((webinar: any) => !!webinar.subject)
+      console.log({ json })
+      return json
     },
 
     convertQueryArrayToObject(response: any[]) {
-      let json = [] as any;
+      let json = [] as any
 
       if (response.length) {
-        const columns = response[0].columns as string[];
+        const columns = response[0].columns as string[]
         json = response[0].values.map((row: any[]) => {
-          const obj = {} as any;
-          columns.forEach((col, i) => (obj[col] = row[i]));
+          const obj = {} as any
+          columns.forEach((col, i) => (obj[col] = row[i]))
 
           // fix newlines __NL__
           if (obj.body) {
-            obj.body = obj.body.replaceAll('__NL__', '<br/>');
+            obj.body = obj.body.replaceAll('__NL__', '<br/>')
           }
 
           // scrub email addresses
           if (obj.from_field) {
-            let email = obj.from_field as string;
-            let lt = email.indexOf('<');
-            if (lt > -1) email = email.substring(0, lt);
-            if (email.replaceAll) email = email.replaceAll('"', '').trim();
-            obj.from_field = email;
+            let email = obj.from_field as string
+            let lt = email.indexOf('<')
+            if (lt > -1) email = email.substring(0, lt)
+            if (email.replaceAll) email = email.replaceAll('"', '').trim()
+            obj.from_field = email
           }
-          return obj;
-        });
+          return obj
+        })
       }
-      return json;
+      return json
     },
   },
-});
+})
 </script>

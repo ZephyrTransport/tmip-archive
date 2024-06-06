@@ -29,18 +29,18 @@
 </template>
 
 <script lang="ts">
-const DB_PATH = '/tmip-archive-assets/tmip.db.zst';
+const DB_PATH = '/tmip-archive-assets/tmip.db.zst'
 
-import { defineComponent } from 'vue';
-import { ZSTDDecoder } from 'zstddec';
-import initSQL, { Database } from 'sql.js';
-import sqlWasm from 'sql.js/dist/sql-wasm.wasm?url';
-import debounce from 'debounce';
+import { defineComponent } from 'vue'
+import { ZSTDDecoder } from 'zstddec'
+import initSQL, { Database } from 'sql.js'
+import sqlWasm from 'sql.js/dist/sql-wasm.wasm?url'
+import debounce from 'debounce'
 
-import SearchResultsView from './SearchResultsView.vue';
-import MessageView from './MessageView.vue';
-import WebinarsListView from './WebinarsListView.vue';
-import WebinarView from './WebinarView.vue';
+import SearchResultsView from './SearchResultsView.vue'
+import MessageView from './MessageView.vue'
+import WebinarsListView from './WebinarsListView.vue'
+import WebinarView from './WebinarView.vue'
 
 export default defineComponent({
   components: { WebinarsListView, WebinarView, SearchResultsView, MessageView },
@@ -54,66 +54,66 @@ export default defineComponent({
       debounceQuery: {} as any,
       debounceQuerySearchTerm: {} as any,
       currentPath: '',
-    };
+    }
   },
 
   computed: {
     routerView() {
-      if (!this.db) return SearchResultsView;
+      if (!this.db) return SearchResultsView
 
-      const path = this.currentPath.slice(1) || '/';
+      const path = this.currentPath.slice(1) || '/'
 
-      this.showSearch = false;
+      this.showSearch = false
 
-      if (path.indexOf('/webinar/') > -1) return WebinarView;
-      if (path.indexOf('/webinars') > -1) return WebinarsListView;
+      if (path.indexOf('/webinar/') > -1) return WebinarView
+      if (path.indexOf('/webinars') > -1) return WebinarsListView
 
-      this.showSearch = true;
+      this.showSearch = true
 
-      if (path.startsWith('/message')) return MessageView;
+      if (path.startsWith('/message')) return MessageView
 
-      return SearchResultsView;
+      return SearchResultsView
     },
 
     currentMessages() {
-      const path = this.currentPath.slice(1) || '/';
-      if (!path.startsWith('/message')) return null;
-      let message = path.slice(9);
-      if (message.includes('?')) message = message.slice(0, message.indexOf('?'));
+      const path = this.currentPath.slice(1) || '/'
+      if (!path.startsWith('/message')) return null
+      let message = path.slice(9)
+      if (message.includes('?')) message = message.slice(0, message.indexOf('?'))
 
-      const details = this.query('messages', { message });
-      return details;
+      const details = this.query('messages', { message })
+      return details
     },
   },
 
   watch: {
     searchTerm() {
-      this.results = [];
-      this.debounceQuerySearchTerm('messages', { search: this.searchTerm });
+      this.results = []
+      this.debounceQuerySearchTerm('messages', { search: this.searchTerm })
     },
   },
 
   async mounted() {
-    this.debounceQuery = debounce(this.query, 333);
-    this.debounceQuerySearchTerm = debounce(this.getMessagesForSearchTerm, 333);
+    this.debounceQuery = debounce(this.query, 333)
+    this.debounceQuerySearchTerm = debounce(this.getMessagesForSearchTerm, 333)
 
-    const urlParams = new URLSearchParams(window.location.search);
-    console.log(urlParams);
+    const urlParams = new URLSearchParams(window.location.search)
+    console.log(urlParams)
 
-    this.currentPath = window.location.hash;
+    this.currentPath = window.location.hash
 
-    console.log(555, this.currentPath);
+    console.log(555, this.currentPath)
 
     window.addEventListener('hashchange', () => {
-      console.log('PING!');
-      this.currentPath = window.location.hash;
-      console.log(window.location.hash);
-    });
+      console.log('PING!')
+      this.currentPath = window.location.hash
+      console.log(window.location.hash)
+    })
 
-    console.log('LOADING DATABASE--');
-    const buffer = await this.fetchSqliteDatabase();
-    this.db = await this.initializeDatabaseFromBuffer(buffer);
-    console.log('--DONE LOADING DATABASE');
+    console.log('LOADING DATABASE--')
+    const buffer = await this.fetchSqliteDatabase()
+    this.db = await this.initializeDatabaseFromBuffer(buffer)
+    console.log('--DONE LOADING DATABASE')
 
     // //tables
     // const query = this.db.exec("SELECT name FROM sqlite_master where type='table';");
@@ -123,113 +123,113 @@ export default defineComponent({
 
   methods: {
     convertQueryArrayToObject(response: any[]) {
-      let json = [] as any;
+      let json = [] as any
 
       if (response.length) {
-        const columns = response[0].columns as string[];
+        const columns = response[0].columns as string[]
         json = response[0].values.map((row: any[]) => {
-          const obj = {} as any;
-          columns.forEach((col, i) => (obj[col] = row[i]));
+          const obj = {} as any
+          columns.forEach((col, i) => (obj[col] = row[i]))
           // scrub email addresses
           if (obj.from_field) {
-            let email = obj.from_field as string;
-            let lt = email.indexOf('<');
-            if (lt > -1) email = email.substring(0, lt);
-            email = email.replaceAll('"', '').trim();
-            obj.from_field = email;
+            let email = obj.from_field as string
+            let lt = email.indexOf('<')
+            if (lt > -1) email = email.substring(0, lt)
+            email = email.replaceAll('"', '').trim()
+            obj.from_field = email
           }
-          return obj;
-        });
+          return obj
+        })
       }
-      return json;
+      return json
     },
 
     getMessagesForSearchTerm(table: string, options?: any) {
-      console.log('GET THREADS', table, options);
-      if (!this.db) return [];
+      console.log('GET THREADS', table, options)
+      if (!this.db) return []
 
       let query =
         `SELECT rowid,* FROM ${table} WHERE` +
         ` from_field LIKE '%${options.search}%'` +
         ` OR subject LIKE '%${options.search}%'` +
-        ` ORDER BY date_timestamp DESC;`;
+        ` ORDER BY date_timestamp DESC;`
 
-      const response = this.db.exec(query);
+      const response = this.db.exec(query)
 
-      const json = this.convertQueryArrayToObject(response);
-      const clipped = json.slice(0, 250);
+      const json = this.convertQueryArrayToObject(response)
+      const clipped = json.slice(0, 250)
 
       if (options?.message) {
-        return clipped;
+        return clipped
       }
 
       // back to search results view. this is probably in the wrong place
-      window.location.hash = '/';
-      this.results = clipped;
+      window.location.hash = '/'
+      this.results = clipped
     },
 
     query(table: string, options?: any) {
-      if (!this.db) return [];
+      if (!this.db) return []
 
-      let query = `SELECT rowid,* FROM ${table} ORDER BY date_timestamp ASC`;
+      let query = `SELECT rowid,* FROM ${table} ORDER BY date_timestamp ASC`
 
       if (options?.search && options.search !== '') {
         query =
           `SELECT rowid,* FROM ${table} WHERE` +
           ` from_field LIKE '%${options.search}%'` +
           ` OR subject LIKE '%${options.search}%'` +
-          ` ORDER BY date_timestamp ASC`;
+          ` ORDER BY date_timestamp ASC`
       }
 
       if (options?.message && options.message !== '') {
-        query = `SELECT rowid,* FROM ${table} WHERE rowid = '${options.message}'`;
+        query = `SELECT rowid,* FROM ${table} WHERE rowid = '${options.message}'`
       }
 
-      query += ';';
+      query += ';'
 
-      const response = this.db.exec(query);
+      const response = this.db.exec(query)
 
-      let answer = [] as any;
+      let answer = [] as any
       if (response.length) {
-        const columns = response[0].columns as string[];
+        const columns = response[0].columns as string[]
         answer = response[0].values.map((row: any[]) => {
-          const obj = {} as any;
-          columns.forEach((col, i) => (obj[col] = row[i]));
+          const obj = {} as any
+          columns.forEach((col, i) => (obj[col] = row[i]))
 
           // fix newlines __NL__
           if (obj.body) {
-            obj.body = obj.body.replaceAll('__NL__', '<br/>');
+            obj.body = obj.body.replaceAll('__NL__', '<br/>')
             obj.body = obj.body.replaceAll(
               '#####################################################################',
               '###'
-            );
+            )
             obj.body = obj.body.replaceAll(
               '************************************************************************',
               '***'
-            );
+            )
           }
 
           // scrub email addresses
           if (obj.from_field) {
-            let email = obj.from_field as string;
-            let lt = email.indexOf('<');
-            if (lt > -1) email = email.substring(0, lt);
-            email = email.replaceAll('"', '').trim();
-            obj.from_field = email;
+            let email = obj.from_field as string
+            let lt = email.indexOf('<')
+            if (lt > -1) email = email.substring(0, lt)
+            email = email.replaceAll('"', '').trim()
+            obj.from_field = email
           }
-          return obj;
-        });
+          return obj
+        })
       }
 
-      const clipped = answer.slice(0, 250);
+      const clipped = answer.slice(0, 250)
       if (options?.message) {
-        return clipped;
+        return clipped
       }
 
       // back to search results view. this is probably in the wrong place
       // this.currentPath = '/'; // window.location.hash;
-      window.location.hash = '/';
-      this.results = clipped;
+      window.location.hash = '/'
+      this.results = clipped
     },
 
     async initializeDatabaseFromBuffer(buffer: Uint8Array) {
@@ -237,27 +237,29 @@ export default defineComponent({
         // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
         // You can omit locateFile completely when running in node
         locateFile: () => sqlWasm,
-      });
+      })
 
-      const LOADED_DB = new SQL.Database(buffer);
-      return LOADED_DB;
+      const LOADED_DB = new SQL.Database(buffer)
+      return LOADED_DB
     },
 
     async fetchSqliteDatabase() {
       // initialize ZSTD decompressor
-      const decoder = new ZSTDDecoder();
-      await decoder.init();
+      const decoder = new ZSTDDecoder()
+      await decoder.init()
 
       // fetch & uncompress archive
-      const archive = await (await fetch(DB_PATH)).arrayBuffer();
-      const buffer = decoder.decode(new Uint8Array(archive));
+      const archive = await (await fetch(DB_PATH)).arrayBuffer()
+      const buffer = decoder.decode(new Uint8Array(archive))
 
-      return buffer;
+      return buffer
     },
   },
-});
+})
 </script>
 
-<style scoped>
-@import './style.css';
+<style>
+@import './css/zephyr-2020.css';
+@import './css/landing-page.css';
+@import './css/style.css';
 </style>
