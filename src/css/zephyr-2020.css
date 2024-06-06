@@ -1,0 +1,145 @@
+#app {
+  background-color: white;
+}
+
+.z-stars ul {
+  padding-left: 0;
+}
+
+.z-stars li {
+  list-style: none;
+  margin-top: 2rem;
+}
+
+.z-stars li a {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.z-programs-list {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.z-program-entry {
+  border-top: 2px solid #0da5d3;
+  padding: 2rem 0;
+}
+
+.z-social-buttons {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+  margin: 0 2rem;
+}
+
+h3.z-hero-subtitle {
+  padding: 0.5rem 0;
+  margin: 2rem auto;
+  text-shadow: none;
+  font-size: 3rem;
+  background-color: #00000099;
+}
+
+.z-event-year {
+  background-color: #0da5d3;
+  color: white;
+  font-weight: bold;
+  font-size: 3rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  margin: 5rem 0rem 1rem 0rem;
+}
+
+.z-events-table {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+}
+
+.z-event-date {
+  grid-column: 1 / 2;
+}
+
+.z-event-title {
+  grid-column: 2 / 3;
+}
+
+.z-upcoming-events {
+  display: grid;
+  gap: 4rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.z-upcoming-events h3 {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 2px solid #0da5d3;
+  color: #335;
+}
+
+.z-header-readable {
+  background-color: #ffffffdd;
+  margin: 5rem auto;
+  padding: 2rem 2rem;
+  width: max-content;
+  font-size: 5rem;
+  border: 5px solid #0da5d3;
+  color: #335;
+}
+
+.z-header-readable h2 {
+  margin: 1.5rem 1rem;
+}
+
+.event-place {
+  margin-bottom: 3rem;
+}
+
+.event-place a {
+  border: 1px solid #0da5d3;
+  padding: 0.5rem 0.5rem;
+}
+
+.event-place a:hover {
+  border: 1px solid #335;
+  text-decoration: none;
+}
+
+@media only screen and (max-width: 75em) {
+  .z-section-title {
+    text-align: center;
+  }
+
+  .z-social-buttons {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media only screen and (max-width: 48em) {
+  .z-header-readable {
+    width: auto;
+  }
+
+  .z-programs-list {
+    margin-top: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .z-section-title {
+    text-align: center;
+  }
+
+  .z-social-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .z-upcoming-events {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
