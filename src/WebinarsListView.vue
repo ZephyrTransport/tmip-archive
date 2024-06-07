@@ -8,17 +8,14 @@
 
     <p>This is the complete list of archived TMIP webinars from 2007-2023.</p>
 
-    <h4>Category:</h4>
-
-    <div class="webinar-categories">
-      <button
-        v-for="(category, i) in categories"
-        :key="category"
-        v-html="category"
-        :class="{ 'is-active': currentCategory == i }"
-        @click="currentCategory = i"
-      ></button>
-    </div>
+    <h4>Search:</h4>
+    <input
+      class="input is-link"
+      style="flex: 1; margin-left: 1rem;"
+      type="text"
+      placeholder="title, presenter, keywords..."
+      v-model="currentSearchTerm"
+    />
 
     <h4>Year:</h4>
     <div class="year-list">
@@ -31,17 +28,41 @@
       </button>
     </div>
 
-    <div class="webinar-table">
-      <div v-for="row in webinars" :key="row.rowid" class="webinar-card" :style="getCardColor()">
-        <a :href="`#/webinar/${row.rowid}`">
-          <h3>{{ row.subject }}</h3>
+    <h4>Category:</h4>
+    <div class="webinar-categories">
+      <button
+        v-for="(category, i) in categories"
+        :key="category"
+        v-html="category"
+        :class="{ 'is-active': currentCategory == i }"
+        @click="currentCategory = i"
+      ></button>
+    </div>
 
-          <div style="display: flex; padding: 0 0.25rem; color: #555">
-            <span style="flex: 1">Webinar {{ row.rowid }}</span>
-            <span>{{ row.date_timestamp.substring(0, 10) }}</span>
+    <h4>Webinars:</h4>
+    <div class="webinar-table">
+      <div class="flex-row webinar-card" style="gap: 0.5rem">
+          <p style="flex: 1">Date</p>
+          <p style="flex: 5">Title</p>
+          <p style="flex: 2">Presenter</p>
+      </div>
+      <div v-for="row in webinars" :key="row.rowid" class="webinar-card">
+        <div class="flex-row" style="gap: 1rem" >
+          <div class="flex-col flex1" style="margin-top: 2px;">
+            <p><b>{{ row.date_timestamp.substring(0, 10).replaceAll('-','.') }}</b></p>
+            <p style="font-size: 13px">Webinar {{ row.rowid }}</p>
           </div>
-          <p style="color: #555; font-size: 12px" v-if="row.category">{{ row.category }}</p>
-        </a>
+
+          <div class="flex-col" style="flex: 5">
+            <p><a :href="`#/webinar/${row.rowid}`">{{ row.subject }}</a></p>
+            <p v-if="row.category" style="color: #555; font-size: 13px" >{{ row.category }}</p>
+          </div>
+
+          <div class="flex-col" style="flex: 2">
+            <p>{{ row.presenter || '&nbsp;' }}</p>
+          </div>
+
+        </div>
       </div>
     </div>
     <p v-show="!webinars.length"><i>&nbsp;&nbsp;No webinars match your current filters.</i></p>
@@ -64,10 +85,10 @@ export default defineComponent({
   data() {
     return {
       webinars: [] as any[],
-      threadMessages: [] as any[],
       years: [...Array(17).keys()].reverse().map(n => n + 2007) as any[],
       currentYear: 'All' as any,
       currentCategory: 0,
+      currentSearchTerm: '',
       categories: [
         'All',
         'Activity Based Modeling',
@@ -93,24 +114,18 @@ export default defineComponent({
   },
 
   watch: {
-    messages() {
-      this.findAttachments()
-      this.getThread()
-    },
     currentCategory() {
       this.listWebinars()
     },
     currentYear() {
       this.listWebinars()
     },
+    currentSearchTerm() {
+      this.listWebinars()
+    },
   },
 
   methods: {
-    getCardColor() {
-      return {
-        backgroundColor: '#eeeef6',
-      }
-    },
 
     async listWebinars() {
       // filter on category
@@ -119,6 +134,7 @@ export default defineComponent({
 
       const filter = {} as any
       if (category !== 'All') filter.category = category
+      if (this.currentSearchTerm) filter.search = this.currentSearchTerm
 
       let webinars = (await this.query('webinars', filter)) as any[]
 
@@ -150,33 +166,25 @@ export default defineComponent({
       }
     },
 
-    async getThread() {
-      console.log('FIND THREAD')
-      if (!this.messages?.length) return
-
-      const message = this.messages[0]
-      console.log({ message })
-      console.log(message.thread)
-
-      const threadMessages = this.query('messages', { thread: message.thread })
-      console.log({ threadMessages })
-
-      this.threadMessages = threadMessages
-
-      // scroll to top if on mobile
-      if (window.matchMedia('(max-width: 640px)').matches) {
-        window.scrollTo(0, 400)
-      }
-    },
-
     query(table: string, options?: any) {
-      console.log(1)
       if (!this.db) return []
-      console.log(2)
 
-      const keys = Object.keys(options) || []
-      const wheres = keys.map(key => `${key} = '${options[key]}'`)
-      const whereClause = wheres.join(' OR ')
+      const { search, ...details} = options
+
+      let wheres = [] as any[]
+
+      //TODO add presenter
+      if (search) {
+        wheres.push(`(subject LIKE '%${search}%' OR body LIKE '%${search}%')`)
+      }
+
+      const keys = Object.keys(details) || []
+      if (keys.length) {
+        wheres.push(keys.map(key => `${key} = '${details[key]}'`) )
+        wheres = wheres.flat()
+      }
+
+      const whereClause = wheres.join(' AND ')
       let query = `SELECT rowid,* FROM ${table}`
       if (whereClause) query += ` WHERE ${whereClause}`
       query += ';'
@@ -184,10 +192,12 @@ export default defineComponent({
       console.log(query)
 
       let response = this.db.exec(query)
-      console.log({ response })
+
       let json = this.convertQueryArrayToObject(response)
       json = json.filter((webinar: any) => !!webinar.subject)
+
       console.log({ json })
+
       return json
     },
 
