@@ -7,20 +7,22 @@
 
     <div class="webinar-card" style="margin-bottom: 2rem; background-color: #56e; color: white">
       <h3>{{ webinar.subject }}</h3>
-      <p>
-        <b>{{ webinar.date_timestamp.substring(0, 10) }}</b>
-        <span v-if="webinar.category"> &raquo; {{ webinar.category }}</span>
-      </p>
+      <h4 v-if="webinar.author">{{ webinar.author}}</h4>
 
-      <p>Webinar {{ webinar.rowid }}</p>
+      <h4>
+        <b>{{ webinar.date_timestamp.substring(0, 10).replaceAll('-','. ') }}</b>
+        <span v-if="webinar.category"> &raquo; {{ webinar.category }}</span>
+        <span> &raquo; Webinar {{ webinar.rowid }}</span>
+      </h4>
+
     </div>
 
     <p class="webinar-body" v-html="cleanBody"></p>
 
     <div class="attachment-panel" v-if="webinar.attachments?.length">
       <h3>Attachments:</h3>
-      <div v-for="attachment in webinar.attachments">
-        <a :href="attachment.url">{{ attachment.filename }}</a>
+      <div v-for="attachment,i in webinar.attachments">
+        <a target="_blank" :href="attach_base_url + attachment">Attachment {{i+1}}:  {{ attachment.substring(1 + attachment.lastIndexOf('/')) }}</a>
       </div>
     </div>
   </div>
@@ -31,7 +33,7 @@ import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
 import { Database } from 'sql.js'
 
-const ATTACH_RAW_URL = 'https://github.com/ZephyrTransport/tmip-archive/raw/main/public/attachments'
+const ATTACH_RAW_URL = 'https://github.com/ZephyrTransport/tmip-archive/raw/main/public/webinars'
 
 export default defineComponent({
   props: {
@@ -41,6 +43,7 @@ export default defineComponent({
 
   data() {
     return {
+      attach_base_url: ATTACH_RAW_URL,
       hash: '',
       webinar: null as any,
     }
@@ -86,6 +89,30 @@ export default defineComponent({
     async getWebinar() {
       console.log('hash', this.hash)
       const webinars = await this.query('webinars', { rowid: this.hash })
+
+      // add author and attachments
+      let authorsAttachments = (await this.query('webinar_authors_attachments', {rowid: this.hash})) as any[]
+      let lookup = {} as any
+      for (const row of authorsAttachments) lookup[row.webinar] = row
+      for (const webinar of webinars)      {
+        if (lookup[webinar.rowid]) {
+          webinar.author = lookup[webinar.rowid].Author || ''
+          webinar.attachments = []
+          for (let i=1; i < 9; i++) {
+            const attachFilename = lookup[webinar.rowid][`Attachment${i}`]
+            if (attachFilename) {
+              // we got an attachment filename! Great!
+              // But now we need to clean it up because they are inconsistent :-/
+              let filename = attachFilename
+              if (attachFilename.startsWith('/webinars/')) filename = attachFilename.substring(9)
+              if (attachFilename.startsWith('/files/webinar/')) filename = attachFilename.substring(14)
+              if (attachFilename.startsWith('/files/webinars/')) filename = attachFilename.substring(15)
+              if (attachFilename.startsWith('TMIP/webinars/')) filename = attachFilename.substring(13)
+              webinar.attachments.push(filename)
+            }
+          }
+        }
+      }
 
       console.log({ webinars })
 
@@ -152,7 +179,6 @@ export default defineComponent({
               '/sites/freightmodelimprovementprogram.localhost/files/webinars/',
               'https://github.com/ZephyrTransport/tmip-archive/raw/main/public/webinars/'
             )
-            console.log(111, obj.body)
           }
 
           // scrub email addresses
@@ -171,3 +197,10 @@ export default defineComponent({
   },
 })
 </script>
+
+<style scoped>
+h4 {
+   color: white;
+   margin-bottom: 1rem;
+}
+</style>

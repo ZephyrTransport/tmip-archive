@@ -59,7 +59,7 @@
           </div>
 
           <div class="flex-col" style="flex: 2">
-            <p>{{ row.presenter || '&nbsp;' }}</p>
+            <p>{{ row.author || '&nbsp;' }}</p>
           </div>
 
         </div>
@@ -74,7 +74,7 @@ import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
 import { Database } from 'sql.js'
 
-const ATTACH_RAW_URL = 'https://github.com/ZephyrTransport/tmip-archive/raw/main/public/attachments'
+const ATTACH_RAW_URL = 'https://github.com/ZephyrTransport/tmip-archive/raw/main/public/webinars'
 
 export default defineComponent({
   props: {
@@ -143,7 +143,22 @@ export default defineComponent({
       }
 
       webinars.sort((a, b) => (a.date_timestamp < b.date_timestamp ? 1 : -1))
-      console.log({ webinars })
+
+      // add authors from joe's table
+      let authorsAttachments = (await this.query('webinar_authors_attachments', {})) as any[]
+      let lookup = {} as any
+      for (const row of authorsAttachments) lookup[row.webinar] = row
+      for (const webinar of webinars)      {
+        if (lookup[webinar.rowid]) {
+          webinar.author = lookup[webinar.rowid].Author || ''
+          // skip attachments on list page---
+          // webinar.attachments = []
+          // for (let i=1; i < 9; i++) {
+          //   const attachFilename = lookup[webinar.rowid][`Attachment${i}`]
+          //   if (attachFilename) webinar.attachments.push(attachFilename)
+          // }
+        }
+      }
 
       if (webinars) this.webinars = webinars
     },
@@ -194,7 +209,7 @@ export default defineComponent({
       let response = this.db.exec(query)
 
       let json = this.convertQueryArrayToObject(response)
-      json = json.filter((webinar: any) => !!webinar.subject)
+      // json = json.filter((webinar: any) => !!webinar.subject)
 
       console.log({ json })
 
