@@ -2,7 +2,8 @@
      Questions / PRs, contact Billy Charlton <mail@billyc.cc>
 ---------------------------------------------------------------- -->
 <template>
-  <div class="top-bar" v-show="showSearch">
+  <p v-if="!db"><i>Loading TMIP database...</i></p>
+  <div class="top-bar" v-show="db && showSearch">
     <h3>Search the TMIP email list archive</h3>
 
     <input
@@ -58,7 +59,7 @@
 
   <component :is="routerView" :results="results" :messages="currentMessages" :db="db" />
 
-  <div v-show="showSearch">
+  <div v-show="db && showSearch">
     <hr />
     <p id="info-text" style="font-size: 14px">
       Messages from 2001-2023 are all in the archive database. Due to multiple server transitions
