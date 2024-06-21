@@ -13,6 +13,9 @@ main Zephyr website at https://zephyrtransport.org/TMIP
   - [NodeJS](https://nodejs.org) - Javascript dev tools
   - ZStd compression tool. Much better compression that zip, etc.
     On Mac run `brew install zstd`, on Linux `apt install zstd` (etc)
+  - [sqlite-utils](https://sqlite-utils.datasette.io/en/stable/) - 
+    Utilities for sql-lite. On Mac run `brew install sqlite-utils`
+  - Data files from should be downloaded from [TMIP Archive 20240418](https://drive.google.com/drive/folders/1TMAri6F7OUi4cYrczgqAYN-tiw2L_zkG?usp=drive_link)
 
 - This is a VueJS static site, built using the [Vite](https://vitejs.dev) code bundler. Together these
   create the javascript and css files that get inserted into https://zephyrtransport.org/TMIP
